@@ -14,9 +14,9 @@ public class Attribute {
     public String getSummary() {
         String res = name + " " + type + " ";
         if (nullable) {
-            res += "null";
+            res += "NULL";
         } else {
-            res += "not null";
+            res += "NOT NULL";
         }
         return res;
     }
