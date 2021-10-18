@@ -1,4 +1,6 @@
-package database;
+package sql;
+
+import sql.Attribute;
 
 public class QueriesBuilder {
     public static String generateCreateQuery(final String name, Attribute... attributes) {
@@ -36,5 +38,9 @@ public class QueriesBuilder {
         }
         res.append(")");
         return res.toString();
+    }
+
+    public static String generateGetAllQuery(final String name) {
+        return "SELECT * FROM " + name;
     }
 }

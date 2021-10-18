@@ -1,4 +1,4 @@
-package database;
+package sql;
 
 public class Attribute {
     private final String name;
