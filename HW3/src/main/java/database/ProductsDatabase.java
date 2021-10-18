@@ -1,16 +1,18 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import domain.Product;
+import sql.Attribute;
 
-import static database.QueriesBuilder.generateCreateQuery;
+import java.util.List;
+import java.sql.*;
+import java.util.Arrays;
+
+import static sql.QueriesBuilder.*;
 
 public class ProductsDatabase {
     private static final String SCHEME = "jdbc:sqlite";
     public static final String NAME = "PRODUCTS";
-    public static final Attribute[] ATTRIBUTES = { new Attribute("NAME", "TEXT", false),
+    private static final Attribute[] ATTRIBUTES = { new Attribute("NAME", "TEXT", false),
             new Attribute("PRICE", "INT", false) };
 
     private final String dbFile;
@@ -19,13 +21,36 @@ public class ProductsDatabase {
         this.dbFile = dbFile;
     }
 
-    public void create() throws SQLException {
+    private void executeUpdate(final String sql) throws SQLException {
         try (Connection c = DriverManager.getConnection(SCHEME + ":" + dbFile)) {
-            String sql = generateCreateQuery(NAME, ATTRIBUTES);
             Statement stmt = c.createStatement();
-
             stmt.executeUpdate(sql);
             stmt.close();
         }
+    }
+
+    private List<Product> executeQuery(final String sql) throws SQLException {
+        try (Connection c = DriverManager.getConnection(SCHEME + ":" + dbFile)) {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            List<Product> parsed = ProductResultSetParser.parseResultSet(rs);
+            stmt.close();
+            return parsed;
+        }
+    }
+
+    public void create() throws SQLException {
+        executeUpdate(generateCreateQuery(NAME, ATTRIBUTES));
+    }
+
+    public void insert(final String name, final int price) throws SQLException {
+        Attribute[] attributes = Arrays.copyOf(ATTRIBUTES, ATTRIBUTES.length);
+        attributes[0].setValue(name);
+        attributes[1].setValue(Integer.toString(price));
+        executeUpdate(generateInsertQuery(NAME, attributes));
+    }
+
+    public List<Product> getAll() throws SQLException {
+        return executeQuery(generateGetAllQuery(NAME));
     }
 }
