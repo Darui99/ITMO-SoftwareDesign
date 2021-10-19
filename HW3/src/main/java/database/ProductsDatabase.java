@@ -6,6 +6,7 @@ import sql.Attribute;
 import java.util.List;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.function.Function;
 
 import static sql.QueriesBuilder.*;
 
@@ -29,11 +30,11 @@ public class ProductsDatabase {
         }
     }
 
-    private List<Product> executeQuery(final String sql) throws SQLException {
+    private <T> T executeQuery(final String sql, Function<ResultSet, T> parser) throws SQLException {
         try (Connection c = DriverManager.getConnection(SCHEME + ":" + dbFile)) {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            List<Product> parsed = ProductResultSetParser.parseResultSet(rs);
+            T parsed = parser.apply(rs);
             stmt.close();
             return parsed;
         }
@@ -51,6 +52,22 @@ public class ProductsDatabase {
     }
 
     public List<Product> getAll() throws SQLException {
-        return executeQuery(generateGetAllQuery(NAME));
+        return executeQuery(generateGetAllQuery(NAME), ProductResultSetParser::parseResultSetAsEntities);
+    }
+
+    public List<Product> getMax() throws SQLException {
+        return executeQuery(generateGetMaxQuery(NAME), ProductResultSetParser::parseResultSetAsEntities);
+    }
+
+    public List<Product> getMin() throws SQLException {
+        return executeQuery(generateGetMinQuery(NAME), ProductResultSetParser::parseResultSetAsEntities);
+    }
+
+    public int getSumByPrice() throws SQLException {
+        return executeQuery(generateGetSumQuery(NAME, "PRICE"), ProductResultSetParser::parseResultSetAsInt);
+    }
+
+    public int getCount() throws SQLException {
+        return executeQuery(generateGetCountQuery(NAME), ProductResultSetParser::parseResultSetAsInt);
     }
 }
