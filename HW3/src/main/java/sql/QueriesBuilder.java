@@ -43,4 +43,20 @@ public class QueriesBuilder {
     public static String generateGetAllQuery(final String name) {
         return "SELECT * FROM " + name;
     }
+
+    public static String generateGetMaxQuery(final String name) {
+        return "SELECT * FROM " + name + " ORDER BY PRICE DESC LIMIT 1";
+    }
+
+    public static String generateGetMinQuery(final String name) {
+        return "SELECT * FROM " + name + " ORDER BY PRICE LIMIT 1";
+    }
+
+    public static String generateGetSumQuery(final String name, final String attribute) {
+        return "SELECT SUM(" + attribute + ") FROM " + name;
+    }
+
+    public static String generateGetCountQuery(final String name) {
+        return "SELECT COUNT(*) FROM " + name;
+    }
 }

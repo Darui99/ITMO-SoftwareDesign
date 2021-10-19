@@ -1,9 +1,10 @@
 package database;
 
 import org.junit.jupiter.api.Test;
+import sql.Attribute;
 
-import static database.QueriesBuilder.generateCreateQuery;
 import static org.junit.jupiter.api.Assertions.*;
+import static sql.QueriesBuilder.*;
 
 class QueriesBuilderTest {
 
@@ -38,6 +39,41 @@ class QueriesBuilderTest {
                 "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                 "SOURCE TEXT NULL)";
 
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_get_all() {
+        String actual = generateGetAllQuery("PRODUCTS");
+        String expected = "SELECT * FROM PRODUCTS";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_get_max() {
+        String actual = generateGetMaxQuery("PRODUCTS");
+        String expected = "SELECT * FROM PRODUCTS ORDER BY PRICE DESC LIMIT 1";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_get_min() {
+        String actual = generateGetMinQuery("PRODUCTS");
+        String expected = "SELECT * FROM PRODUCTS ORDER BY PRICE LIMIT 1";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_get_sum() {
+        String actual = generateGetSumQuery("PRODUCTS", "PRICE");
+        String expected = "SELECT SUM(PRICE) FROM PRODUCTS";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_get_count() {
+        String actual = generateGetCountQuery("PRODUCTS");
+        String expected = "SELECT COUNT(*) FROM PRODUCTS";
         assertEquals(expected, actual);
     }
 }
