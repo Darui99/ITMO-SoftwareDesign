@@ -17,9 +17,9 @@ public class Main {
         context.setContextPath("/");
         server.setHandler(context);
 
-        context.addServlet(new ServletHolder(new AddProductServlet()), "/add-product");
-        context.addServlet(new ServletHolder(new GetProductsServlet()),"/get-products");
-        context.addServlet(new ServletHolder(new QueryServlet()),"/query");
+        context.addServlet(new ServletHolder(new AddProductServlet(database)), "/add-product");
+        context.addServlet(new ServletHolder(new GetProductsServlet(database)),"/get-products");
+        context.addServlet(new ServletHolder(new QueryServlet(database)),"/query");
 
         server.start();
         server.join();
