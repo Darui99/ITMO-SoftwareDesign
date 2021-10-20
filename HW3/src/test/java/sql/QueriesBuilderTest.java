@@ -1,4 +1,4 @@
-package database;
+package sql;
 
 import org.junit.jupiter.api.Test;
 import sql.Attribute;
