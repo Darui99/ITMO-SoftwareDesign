@@ -18,11 +18,15 @@ public class ResponseBuilder {
         response.append("\n");
     }
 
-    public void addRows(List<DatabaseEntity> list) {
+    public void addRowsFromList(List<DatabaseEntity> list) {
         for (DatabaseEntity entity : list) {
             response.append(entity.getRowString());
-            response.append("</br>").append("\n");
+            response.append(" </br>").append("\n");
         }
+    }
+
+    public void addLine(final String content) {
+        response.append(content).append(" </br>").append("\n");
     }
 
     public String getAllAndFlush() {
