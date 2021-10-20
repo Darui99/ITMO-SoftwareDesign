@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Product implements DatabaseEntity {
     private final String name;
@@ -23,6 +24,14 @@ public class Product implements DatabaseEntity {
     @Override
     public String getRowString() {
         return name + "\t" + price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return price == product.price && Objects.equals(name, product.name);
     }
 
     public static List<DatabaseEntity> convertList(List<Product> products) {

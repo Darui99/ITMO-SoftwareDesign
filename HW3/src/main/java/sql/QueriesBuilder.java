@@ -1,7 +1,5 @@
 package sql;
 
-import sql.Attribute;
-
 public class QueriesBuilder {
     public static String generateCreateQuery(final String name, Attribute... attributes) {
         StringBuilder res = new StringBuilder();
