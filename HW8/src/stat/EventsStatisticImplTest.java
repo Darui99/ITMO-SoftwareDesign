@@ -35,13 +35,17 @@ class EventsStatisticImplTest {
         assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 60), "c", new Fraction(3, 60)));
     }
 
+    private void check_a(int num, int den) {
+        assertEquals(stat.getEventStatisticByName("a"), new Fraction(num, den));
+        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(num, den)));
+    }
+
     @Test
     public void test2_one_per_hour() {
         for (int i = 0; i < 3; i++) {
             clock.setNow(start.plus(i, ChronoUnit.HOURS));
             stat.incEvent("a");
-            assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 60));
-            assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 60)));
+            check_a(1, 60);
         }
     }
 
@@ -52,8 +56,7 @@ class EventsStatisticImplTest {
             for (int j = 0; j <= i; j++) {
                 stat.incEvent("a");
             }
-            assertEquals(stat.getEventStatisticByName("a"), new Fraction(i + 1, 60));
-            assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(i + 1, 60)));
+            check_a(i + 1, 60);
         }
     }
 
@@ -61,33 +64,26 @@ class EventsStatisticImplTest {
     public void test4_manual_border() {
         clock.setNow(Instant.parse("2021-11-15T09:29:59Z"));
         stat.incEvent("a");
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 60));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 60)));
+        check_a(1, 60);
 
         clock.setNow(Instant.parse("2021-11-15T09:30:00Z"));
         stat.incEvent("a");
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 30));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 30)));
+        check_a(1, 30);
 
         clock.setNow(Instant.parse("2021-11-15T09:30:01Z"));
         stat.incEvent("a");
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 20));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 20)));
+        check_a(1, 20);
 
         clock.setNow(Instant.parse("2021-11-15T10:29:58Z"));
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 20));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 20)));
+        check_a(1, 20);
 
         clock.setNow(Instant.parse("2021-11-15T10:29:59Z"));
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 30));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 30)));
+        check_a(1, 30);
 
         clock.setNow(Instant.parse("2021-11-15T10:30:00Z"));
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(1, 60));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(1, 60)));
+        check_a(1, 60);
 
         clock.setNow(Instant.parse("2021-11-15T10:30:01Z"));
-        assertEquals(stat.getEventStatisticByName("a"), new Fraction(0, 60));
-        assertEquals(stat.getAllEventStatistic(), Map.of("a", new Fraction(0, 60)));
+        check_a(0, 60);
     }
 }
