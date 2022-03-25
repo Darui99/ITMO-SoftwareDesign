@@ -10,7 +10,7 @@ public class UserManager {
 
     public UserManager() {
         users = new HashMap<>();
-        exchange = new ExchangeProvider("localhost:8082");
+        exchange = new ExchangeProvider("localhost:8080");
     }
 
     public void checkUser(int userId) {

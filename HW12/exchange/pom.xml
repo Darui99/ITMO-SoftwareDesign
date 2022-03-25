@@ -64,7 +64,7 @@
                                     <descriptorRef>artifact-with-dependencies</descriptorRef>
                                 </assembly>
                                 <ports>
-                                    <port>8083/tcp</port>
+                                    <port>8080/tcp</port>
                                 </ports>
                                 <cmd>
                                     <exec>
